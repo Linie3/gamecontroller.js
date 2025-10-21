@@ -94,45 +94,46 @@ const gamepad = {
         }
       },
       associateEvent: function(eventName, callback, type) {
+        const eventId = this.getEventId(eventName)
+        if (eventId.constructor === Array) {
+          this.axesActions[eventId[0]][eventId[1]][type] = callback
+        } else {
+          this.buttonActions[eventId][type] = callback;
+        }
+      },
+      getEventId: function(eventName) {
+        let buttonId
         if (eventName.match(/^button\d+$/)) {
-          const buttonId = parseInt(eventName.match(/^button(\d+)$/)[1]);
-          if (buttonId >= 0 && buttonId < this.buttons) {
-            this.buttonActions[buttonId][type] = callback;
-          } else {
-            error(MESSAGES.INVALID_BUTTON);
+          const parsed = parseInt(eventName.match(/^button(\d+)$/)[1]);
+          if (parsed >= 0 && parsed <= 16) {
+            buttonId = parsed
           }
         } else if (eventName === 'start') {
-          this.buttonActions[9][type] = callback;
+          buttonId = 9
         } else if (eventName === 'select') {
-          this.buttonActions[8][type] = callback;
+          buttonId = 8
         } else if (eventName === 'r1') {
-          this.buttonActions[5][type] = callback;
+          buttonId = 5
         } else if (eventName === 'r2') {
-          this.buttonActions[7][type] = callback;
+          buttonId = 7
         } else if (eventName === 'l1') {
-          this.buttonActions[4][type] = callback;
+          buttonId = 4
         } else if (eventName === 'l2') {
-          this.buttonActions[6][type] = callback;
+          buttonId = 6
         } else if (eventName === 'power') {
-          if (this.buttons >= 17) {
-            this.buttonActions[16][type] = callback;
-          } else {
-            error(MESSAGES.INVALID_BUTTON);
-          }
+          buttonId = 16
         } else if (eventName.match(/^(up|down|left|right)(\d+)$/)) {
           const matches = eventName.match(/^(up|down|left|right)(\d+)$/);
           const direction = matches[1];
           const axe = parseInt(matches[2]);
-          if (axe >= 0 && axe < this.axes) {
-            this.axesActions[axe][direction][type] = callback;
-          } else {
-            error(MESSAGES.INVALID_BUTTON);
+          if (axe < 2 && axe >= 0) {
+            buttonId = [axe, direction]
           }
         } else if (eventName.match(/^(up|down|left|right)$/)) {
           const direction = eventName.match(/^(up|down|left|right)$/)[1];
-          this.axesActions[0][direction][type] = callback;
+          buttonId = [0, direction]
         }
-        return this;
+        return buttonId
       },
       on: function(eventName, callback) {
         return this.associateEvent(eventName, callback, 'action');
