@@ -96,9 +96,13 @@ const gamepad = {
       associateEvent: function(eventName, callback, type) {
         const eventId = this.getEventId(eventName)
         if (eventId.constructor === Array) {
-          this.axesActions[eventId[0]][eventId[1]][type] = callback
+          if (eventId[0] < this.axes) {
+            this.axesActions[eventId[0]][eventId[1]][type] = callback
+          }
         } else {
-          this.buttonActions[eventId][type] = callback;
+          if (eventId < this.buttons) {
+            this.buttonActions[eventId][type] = callback;
+          }
         }
         return this;
       },
