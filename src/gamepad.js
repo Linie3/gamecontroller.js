@@ -100,6 +100,7 @@ const gamepad = {
         } else {
           this.buttonActions[eventId][type] = callback;
         }
+        return this;
       },
       getEventId: function(eventName) {
         let buttonId
