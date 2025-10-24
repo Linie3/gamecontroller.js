@@ -85,10 +85,10 @@ const gamepad = {
               const axe = Math.floor(x / 2);
               this.axeValues[axe][x % 2] = val;
 
-              this.triggerDirectionalAction('right', axe, val >= this.axeThreshold[0], x, 0);
-              this.triggerDirectionalAction('left', axe, val <= -this.axeThreshold[0], x, 0);
-              this.triggerDirectionalAction('down', axe, val >= this.axeThreshold[0], x, 1);
-              this.triggerDirectionalAction('up', axe, val <= -this.axeThreshold[0], x, 1);
+              this.triggerDirectionalAction('right', axe, true, x, 0);
+              this.triggerDirectionalAction('left', axe, true, x, 0);
+              this.triggerDirectionalAction('down', axe, true, x, 1);
+              this.triggerDirectionalAction('up', axe, true, x, 1);
             }
           }
         }
